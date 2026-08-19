@@ -1,0 +1,112 @@
+name=input("What is your name ? ")
+while name.strip() == "" :
+    name=input("Please try again")
+
+
+def get_product():
+   product=input("What is the product ? ")
+   while product.strip() == "" :
+    product=input("Please try again input is empty")
+   return product
+ 
+
+def get_price():
+   price=input("What is the price ? £")
+   if price.startswith("£"):
+       price=price[1:]
+   try:
+        price=float(price)
+        
+   except ValueError:
+        print("It is not a number")
+        return get_price()
+   return price
+
+def get_quantity():
+   quantity=input("What is the quantity ? ")
+   while quantity=="0" or quantity.strip()=="" or not quantity.isdigit() :  
+     if quantity.strip() == "":
+            print("Cant be empty")
+     elif quantity == "0":
+            print("Cant be 0")
+     elif not quantity.isdigit():
+            print("It is not a number")
+     quantity=input("Please try again")
+   return int(quantity)
+
+def get_discount():
+   discount=input("What is the discount ? ")
+   if discount.strip()!=""  :
+       if discount.endswith("%"):
+          discount=discount[:-1]
+         
+       try:
+          discount=float(discount)
+             
+       except ValueError:
+           print("It is not a number")
+           return get_discount()
+       if discount>100 or discount<0:
+           print("It is greater than 100 or less than 0")
+           return get_discount()
+       
+       else:
+         discount/=100
+         return discount
+   print("Discount cannot be empty")
+   return get_discount()   
+      
+
+store={}
+total=0
+discount=0
+
+continuation=True
+while continuation:
+    product=get_product()
+    price=get_price()
+    quantity=get_quantity()
+    item_total=(price*quantity)
+    total+=item_total
+    store[product]={"price":price,"quantity":quantity,"total":item_total}
+
+    product_continue=input("\nIs there another product y/n ")
+    while product_continue !="n" and product_continue!="y":
+        product_continue=input("\nonly input y/n ")
+    if product_continue=="n":
+        continuation=False
+    
+
+check_discount=input("Do you have a discount y/n ")
+while check_discount !="n" and check_discount!="y":
+    check_discount=input("\nonly input y/n ")
+if check_discount=="y":
+   discount=get_discount()
+   total_discount=total-(total*discount)
+else:
+   total_discount=total
+
+
+print()
+print("="*60)
+print (f"{'Invoice':^60}")
+print("="*60)
+
+print("Customer: ",name)
+print("\n"+"-"*60)
+print(f"{'Product':<20}{'Price'}{'Quantity':>12}{'Item total':>12}")
+
+for product, details in store.items():   
+    print("-"*60)
+    print(f"{product:<20}£{details['price']:<8.2f}{details['quantity']:<14}£{details['total']:.2f}")
+
+print("-"*60)
+print()
+print(f"{'Sub Total: ':<16}£{total:.2f}")
+print(f"{'Discount:  ':<15}-£{total*discount:.2f}")
+print('-'*60)
+print(f"{'Total:':<20}£{total_discount:.2f}")
+
+
+
+
